@@ -1,8 +1,8 @@
-module GeradorImm(
-    input [11:0] imediato,
-    output reg [31:0] imm_estendido,
+module ImmGen (
+    input [11:0] imediato, // Corrigido para 'imediato'
+    output reg [31:0] imm_estendido
 );
-
-    assign imm_estendido = {{20{in[11]}}, imediato};
-
+    always @(*) begin
+        imm_estendido = {{20{imediato[11]}}, imediato}; // Extensão de sinal
+    end
 endmodule

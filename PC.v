@@ -1,30 +1,32 @@
-// funcoes lh, sh, add, or, andi, sll, bne
-module pc_counter(
+module PC(
     input clock,
-    input endereco_pc, //Endereco que vem do pc
-    input imediato, //Sera usado para calcular desvio
-    input sinal_mux; //Resultao  da porta and
-    output endereco_saida //Vem do pc+4 ou pc+imm
+    input reset,
+    input wire [31:0] endereco_pc, // Endereco que vem do PC
+    input wire [31:0] imediato,    // Será usado para calcular desvio
+    input wire sinal_mux,          // Resultado da porta AND
+    output reg [31:0] endereco_saida // Vem do PC+4 ou PC+imm
 );
-
 reg [31:0] aux1;
 reg [31:0] aux2;
-initial begin
-    aux1 = 32'b0;
-    aux2 = 32'b0;
-end
- 
-always @(negedge clock) begin // borda de descida = calculamos o valor do endereço
-    aux1 = endereco_pc + 4;
-    aux2 = endereco_pc + imediato; // PC + desvio
 
-    if(sinal_mux == 0) begin
-        endereco_saida = aux1;
+always @(posedge clock or posedge reset) begin
+    if (reset) begin
+       endereco_saida <= 32'b0;
     end 
     else begin
-        endereco_saida = aux2;
-    end
-end
+        aux1 <= endereco_pc + 4;
+        aux2 <= endereco_pc + imediato; // PC + desvio
 
+        if (sinal_mux == 0) begin
+            endereco_saida <= aux1;
+        end else begin
+            endereco_saida <= aux2;
+        end  
+         
+        $display("Endereço de saida: %b", endereco_saida);
+    end
+     $display("PC e imediato: %b", endereco_pc, imediato);
+
+end
 
 endmodule
