@@ -22,7 +22,7 @@ module MemInstrucoes (
     always @(endereco) begin
         instrucao_saida <= memoria[endereco]; // Lê a instrução da memória
 
-        $display("Endereco: %b, Instrucao: %b", $time, endereco, instrucao_saida);
+        //$display("Endereco: %b, Instrucao: %b", $time, endereco, instrucao_saida);
 
         opcode   <= instrucao_saida[6:0];     // Campos opcode
         funct3   <= instrucao_saida[14:12];   // Campos funct3 (3 bits)

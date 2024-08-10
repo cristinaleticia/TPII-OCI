@@ -9,24 +9,16 @@ module PC(
 reg [31:0] aux1;
 reg [31:0] aux2;
 
-always @(posedge clock or posedge reset) begin
-    if (reset) begin
-       endereco_saida <= 32'b0;
+always @(posedge clock) begin
+    if (reset==1) begin
+        endereco_saida <= 32'b0;
+        // Exibição de depuração para reset
+        //$display("RESET ativado: endereco_saida = %b", endereco_saida);
     end 
     else begin
-        aux1 <= endereco_pc + 4;
-        aux2 <= endereco_pc + imediato; // PC + desvio
-
-        if (sinal_mux == 0) begin
-            endereco_saida <= aux1;
-        end else begin
-            endereco_saida <= aux2;
-        end  
-         
-        $display("Endereço de saida: %b", endereco_saida);
+        endereco_saida <= endereco_pc;
     end
-     $display("PC e imediato: %b", endereco_pc, imediato);
-
+    //$display("endereco pc = %b, endereco_saida = %b", endereco_pc, endereco_saida);
 end
 
 endmodule

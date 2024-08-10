@@ -7,7 +7,7 @@ module Controle (
     output reg sinal_escrita,         // Sinal de escrita na memória
     output reg reg_escrita,           // Sinal de escrita no registrador
     output reg ALUSrc,                // Se a fonte da ALU é imediato
-    output reg resultado_desvio,      // Se a instrução é um desvio
+    output reg branch,      // Se a instrução é um desvio
     output reg MemToReg                // Se os dados devem ser lidos da memória
 );
 
@@ -19,7 +19,7 @@ module Controle (
                 sinal_escrita = 0;
                 reg_escrita = 1;
                 ALUSrc = 1;
-                resultado_desvio = 0;
+                branch = 0;
                 MemToReg = 1;
             end
             7'b0100011: begin // Store (sh)
@@ -28,7 +28,7 @@ module Controle (
                 sinal_escrita = 1;
                 reg_escrita = 0;
                 ALUSrc = 1;
-                resultado_desvio = 0;
+                branch = 0;
                 MemToReg = 0;
             end
             7'b0110011: begin // Tipo R
@@ -37,7 +37,7 @@ module Controle (
                 sinal_escrita = 0;
                 reg_escrita = 1;
                 ALUSrc = 0;
-                resultado_desvio = 0;
+                branch = 0;
                 MemToReg = 0;
             end
             7'b0010011: begin // Tipo I (andi, sll)
@@ -50,7 +50,7 @@ module Controle (
                 sinal_escrita = 0;
                 reg_escrita = 1;
                 ALUSrc = 1;
-                resultado_desvio = 0;
+                branch = 0;
                 MemToReg = 0;
             end
             7'b1100011: begin // Resultado de desvio (bne)
@@ -59,7 +59,7 @@ module Controle (
                 sinal_escrita = 0;
                 reg_escrita = 0;
                 ALUSrc = 0;
-                resultado_desvio = 1;
+                branch = 1;
                 MemToReg = 0;
             end
             default: begin
@@ -68,7 +68,7 @@ module Controle (
                 sinal_escrita = 0;
                 reg_escrita = 0;
                 ALUSrc = 0;
-                resultado_desvio = 0;
+                branch = 0;
                 MemToReg = 0;
             end
         endcase
