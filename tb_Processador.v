@@ -1,42 +1,53 @@
-module tb_Processador;
+`timescale 1ns/100ps
 
+module tb_Processador;
     reg clock, reset;
     integer i;
-
     // Instância do módulo Processador
     Processador processa (
         .clock(clock),
         .reset(reset)
     );
 
-    // Geração do sinal de clock
     initial begin
+        $readmemb("instrucoes.mem", processa.mem_inst.memoria_instrucoes);
+        $readmemb("registradores.mem", processa.reg_inst.registradores);
+        $readmemb("dados.mem", processa.memdados_inst.memoria_dados);
+        $dumpfile("saida.vcd");
+        $dumpvars(3, processa);
+
+        reset = 1;
         clock = 0;
-    end
-
-    always #5 clock = ~clock;
-
-    // Inicialização e controle do testbench
-    initial begin
-        // Inicialização do sinal de reset
-        reset = 0;
-        #5 reset = 1;
         #10 reset = 0;
 
-        // Espera para permitir que a simulação progrida
-        #100;
 
-        // Exibe os sinais endereco_saida e endereco_pc
-        $display("endereco_pc = %h, endereco_saida = %h", processa.endereco_pc, processa.endereco_saida);
-
-        // Exibe o valor dos registradores após a simulação
-        $display("Valores dos Registradores:");
-        for (i = 0; i < 32; i = i + 1) begin
-            $display("Registro %0d: %h", i, processa.reg_inst.registradores[i]);
-        end
-
-        // Finaliza a simulação
-        $finish;
     end
 
+    always begin
+        #1 clock = ~clock; // Define o período do clock para 2 unidades de tempo
+    end
+
+     always @(processa.alu_inst.resultado_alu) begin
+        // Exibindo o valor de resultado_alu e outros sinais a cada borda de subida do clock
+        $display("Resultado ALU: %h", processa.alu_inst.resultado_alu);
+        $display("Valor1: %h", processa.alu_inst.valor1);
+        $display("Valor2: %h", processa.alu_inst.valor2);
+        $display("Operacao Selecionada: %b", processa.alu_inst.resultado_alu_control);
+        $display("Resultado Desvio: %b", processa.alu_inst.resultado_desvio);
+
+    end
+    always @(processa.instrucao_saida) begin
+    
+    if (processa.instrucao_saida === 32'bx) begin
+        #10
+        for (integer i = 0; i < 32; i++) begin
+            $display("Registrador %d = %b", i, processa.reg_inst.registradores[i]);
+        end
+         for (integer i = 0; i < 5; i++) begin
+            $display("Dados %d = %b", i, processa.memdados_inst.memoria_dados[i]);
+        end
+        $finish();
+
+    end
+end
 endmodule
