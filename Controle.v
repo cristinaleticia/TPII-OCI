@@ -58,7 +58,7 @@ module Controle (
                 branch <= 1;
                 MemToReg <= 0;
             end
-            default: begin
+            default: begin //Caso entre um valor indefinido, tudo sera 0
                 ALUop <= 2'b00;
                 sinal_leitura <= 0;
                 sinal_escrita <= 0;

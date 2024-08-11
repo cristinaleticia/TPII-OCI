@@ -13,7 +13,7 @@ ALU Control
 */
 
 module ALUControl (
-    input wire [1:0] ALUop, // Opcode da instrucao
+    input wire [1:0] ALUop, //Vem do controle, ajuda a descobri qual tipo de instrucao sera executada
     input wire [2:0] funct3, // Campo funct3 (3 bits)
     output reg [3:0] operacao_selecionada // Operacao que a ALU vai realizar
 );

@@ -9,7 +9,6 @@ module Processador(
 
     // Declaração de sinais
     wire [31:0] endereco_pc;
-    wire [31:0] imediato_PC;
     wire [31:0] endereco_soma4;
     wire [31:0] endereco_desvio;
     wire [31:0] valor_regd;
@@ -31,7 +30,7 @@ module Processador(
     wire [6:0] opcode;
     wire [2:0] funct3;
     wire [6:0] funct7;
-    wire [11:0] imediato;
+    //wire [11:0] imediato;
     wire [1:0] ALUop;
     wire sinal_leitura;
     wire branch;
@@ -65,11 +64,10 @@ module Processador(
         .rd(endereco_regd),
         .opcode(opcode),
         .funct3(funct3),
-        .funct7(funct7),
-        .imediato(imediato)
+        .funct7(funct7)
     );
 
-    // Instância do módulo BRegistradores
+    // Instancia do modulo BRegistradores
     BRegistradores reg_inst (
         .clock(clock),
         .reg_escrita(reg_escrita),
@@ -81,13 +79,14 @@ module Processador(
         .valor_reg2(valor_reg2)
     );
 
-    // Instancia do modulo ImmGen
     ImmGen immgen_inst (
-        .imediato(imediato),
+        .instrucao(instrucao_saida
+        ),
         .imm_estendido(imm_estendido)
     );
 
-    // Instância do módulo ALU
+
+    // Instancia do modulo ALU
     ALU alu_inst (
         .clock(clock),
         .resultado_alu_control(operacao_selecionada),
@@ -97,7 +96,7 @@ module Processador(
         .resultado_desvio(resultado_desvio)
     );
 
-    // Instância do módulo MemDados
+    // Instancia do modulo MemDados
     MemDados memdados_inst (
         .clock(clock),
         .endereco(resultado_alu),
@@ -107,7 +106,7 @@ module Processador(
         .dado_saida(dado_saida)
     );
 
-    // Instância do módulo ALUControl
+    // Instancia do modulo ALUControl
     ALUControl alucontrol_inst (
         .ALUop(ALUop),
         .funct3(funct3),
@@ -129,7 +128,7 @@ module Processador(
     );
 
 
-    // Instância do mux
+    // Instancia do mux
     mux muxpc_inst (
         .valor1(endereco_soma4),
         .valor2(endereco_desvio),
@@ -137,15 +136,14 @@ module Processador(
         .endereco_saida(endereco_pc)
     );
 
-    // Instância do mux
+   // Instancia do mux
     mux muxalu_inst (
         .valor1(valor_reg2),
         .valor2(imm_estendido),
         .sinal_mux(ALUSrc),
         .endereco_saida(valor2)
     );
-
-    // Instância do mux
+    // Instancia do mux
     mux muxmemreg_inst (
         .valor1(resultado_alu),
         .valor2(dado_saida),
