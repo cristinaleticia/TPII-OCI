@@ -21,7 +21,6 @@ module MemDados(
         if (sinal_leitura) begin
            
             if (byte == 1'b0) begin
-                 $display("ok leitura");
                 dado_saida <= {{16{memoria_dados[temp][15]}}, memoria_dados[temp][15:0]}; // Leitura dos bytes 0 e 1
             end else begin
                 dado_saida <= {{16{memoria_dados[temp][31]}}, memoria_dados[temp][31:16]}; // Leitura dos bytes 2 e 3
@@ -33,8 +32,6 @@ module MemDados(
     always @(negedge clock) begin 
         
         if (sinal_escrita) begin
-            $display("ok escrita");
-            $display("teste: velor reg2:%b", valor_reg2);
             if (byte == 1'b0) begin
                 memoria_dados[temp][15:0] <= valor_reg2[15:0]; // Escrita nos bytes 0 e 1
             end else begin

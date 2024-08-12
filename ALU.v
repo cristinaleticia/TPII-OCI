@@ -11,19 +11,21 @@ module ALU (
         resultado_desvio <= 0;
         case(resultado_alu_control)
             4'b0000: begin
-                $display("velor1 : %b valor2: %b", valor1, valor2);
                 resultado_alu <= valor1 & valor2; // andi
             end
             4'b0001: resultado_alu <= valor1 | valor2; // or
             4'b0010: resultado_alu <= valor1 + valor2; // add, sh e lh
             4'b0011: resultado_alu <= valor1 << valor2[4:0]; // sll
             4'b0110: begin
+               
             resultado_alu <= valor1 - valor2; // bne
 
             if (resultado_alu != 0) //Retorna 1 se os numeros forem diferentes
-                resultado_desvio <= 1;
-            else 
+
                 resultado_desvio <= 0;
+            else 
+                resultado_desvio <= 1;
+
         end
             default: resultado_alu <= 32'b0; 
         endcase

@@ -80,8 +80,8 @@ module Processador(
     );
 
     ImmGen immgen_inst (
-        .instrucao(instrucao_saida
-        ),
+        .instrucao(instrucao_saida),
+        .opcode(opcode),
         .imm_estendido(imm_estendido)
     );
 

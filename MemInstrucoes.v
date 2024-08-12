@@ -14,7 +14,6 @@ module MemInstrucoes (
     // Atribuicao da instrucao ao endereço calculado do pc
     always @(endereco) begin
         instrucao_saida <= memoria_instrucoes[endereco/4]; 
-       
         opcode   <= instrucao_saida[6:0];     // Campos opcode
         funct3   <= instrucao_saida[14:12];   // Campos funct3 (3 bits)
 
@@ -45,6 +44,7 @@ module MemInstrucoes (
 
 
             7'b1100011: begin // Tipo B: BNE
+
                 rs1    <= instrucao_saida[19:15]; // Reg 1 (5 bits)
                 rs2    <= instrucao_saida[24:20]; // Reg 2 (5 bits)
             end

@@ -33,12 +33,13 @@ module tb_Processador;
     always @(processa.instrucao_saida) begin
     if (processa.instrucao_saida === 32'bx) begin
         #10
+        $display("Registradores:");
         for (integer i = 0; i < 32; i++) begin
-            $display("Registrador %d = %b", i, processa.reg_inst.registradores[i]);
+            $display("Registrador [%d]: %d", i, processa.reg_inst.registradores[i]);
         end
-        $display("Dados:");
+        $display("Memoria de dados:");
         for (i = 0; i < 64; i = i + 1) begin
-            $display("Dados %d = %b", i, processa.memdados_inst.memoria_dados[i]);
+            $display("Dados [%d] = %d", i, processa.memdados_inst.memoria_dados[i]);
         end
         $finish();
 
